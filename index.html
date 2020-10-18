@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>frontend ML</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Acme">
+    <link rel="stylesheet" href="assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="register-photo" style="height: 100%;background: rgb(254,254,254);margin: 0px;color: rgb(255,255,255);">
+        <div class="form-container">
+            <div class="image-holder"
+                style="background: url(&quot;assets/img/titanic.jpg&quot;);background-size: cover;">
+                <p class="text-center" id="result"></p>
+            </div>
+            <form method="post">
+                <h2 class="text-center" style="font-family: Acme, sans-serif;">Titanic prediction<br></h2>
+                <div class="form-group"><input class="border rounded form-control" type="text" id="Pclass"
+                        style="margin-top: 10px;" placeholder="Pclass(btw 1-3)"><input
+                        class="border rounded form-control" type="text" id="Sex" style="margin-top: 10px;"
+                        placeholder="Sex(1 or 0)">
+                    <input class="border rounded form-control" type="text" id="Age" style="margin-top: 10px;"
+                        placeholder="Age(0-80)"><input class="border rounded form-control" type="text" id="Sibsp"
+                        style="margin-top: 10px;" placeholder="Sibsp(0-8)"><input class="border rounded form-control"
+                        type="text" id="Parch" style="margin-top: 10px;" placeholder="Parch(0-6)">
+                    <input class="border rounded form-control" type="text" id="Fare" style="margin-top: 10px;"
+                        placeholder="Fare(0-512)"></div>
+                <div class="form-group align-content-center align-self-center m-auto">
+                    <div class="form-row">
+                        <div class="col" style="width: 200px;"><input class="border rounded form-control" type="text"
+                                id="Embarked" style="width: 206px;" placeholder="Embarked(0/1/2)"></div>
+                        <div class="col" style="height: 50px;text-align: right;width: 50px;"><button
+                                class="btn btn-primary" id="getData" type="button"
+                                style="margin: 0px;width: 80px;margin-left: 11px;height: 40px;text-align: center;padding: 0px;background: rgb(126,71,244);">Predict</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById("getData").addEventListener('click', getData) //this is linked with the elementbyid which is linked with the button  
+        function getData() {
+            url = "https://ml-prediction1-app.herokuapp.com/titanic/"
+            var Pclass = document.getElementById("Pclass").value.trim()
+            var Sex = document.getElementById("Sex").value.trim()
+            var Age = document.getElementById("Age").value.trim()
+            var Sibsp = document.getElementById("Sibsp").value.trim()
+            var Parch = document.getElementById("Parch").value.trim()
+            var Fare = document.getElementById("Fare").value.trim()
+            var Embarked = document.getElementById("Embarked").value.trim()
+
+            final_url = url + Pclass + "/" + Sex + "/" + Age + "/" + Sibsp + "/" + Parch + "/" + Fare + "/" + Embarked
+            // console.log(final_url)
+            fetch(final_url)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    let result = `<p>Prediction </p>`
+                    //console.log(data)
+                    const { prediction_forest, prediction_gauss, prediction_knn, prediction_logis, prediction_tree } = data
+                    result +=
+                        `<p>prediction from random forest is ${prediction_forest}</p>
+                <p>prediction from Gaussnb is ${prediction_gauss}</p>
+                <p>prediction from knn is ${prediction_knn}</p>
+                <p>prediction from logis is ${prediction_logis}</p>
+                <p>prediction from tree is ${prediction_tree}</p>`;
+                    document.getElementById('result').innerHTML = result;
+                });
+        }
+    </script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
